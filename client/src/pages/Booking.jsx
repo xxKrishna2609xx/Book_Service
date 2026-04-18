@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 
 export default function Booking() {
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -13,11 +14,30 @@ export default function Booking() {
     time: ''
   });
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Assuming backend booking logic goes here later
-    // Redirect to success page for now
-    navigate('/success');
+    setLoading(true);
+    try {
+      // In production, VITE_API_URL would be set in .env
+      const apiUrl = import.meta.env.VITE_API_URL || "http://127.0.0.1:5001/beauty-sallon-901b3/us-central1/api";
+      
+      const res = await fetch(`${apiUrl}/bookings`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData)
+      });
+      
+      if (res.ok) {
+        navigate('/success');
+      } else {
+        alert("Failed to confirm booking. Please check the network.");
+      }
+    } catch (err) {
+      console.error(err);
+      alert("An endpoint error occurred. Make sure your Firebase Emulator/Backend is running.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleChange = (e) => {
@@ -76,8 +96,8 @@ export default function Booking() {
             </div>
           </div>
 
-          <button type="submit" className="w-full bg-brand-pink text-brand-charcoal-dark font-medium text-lg py-4 rounded-xl tracking-wider hover:bg-brand-rose transition-colors mt-8">
-            Confirm Booking
+          <button disabled={loading} type="submit" className="w-full bg-brand-pink text-brand-charcoal-dark font-medium text-lg py-4 rounded-xl tracking-wider hover:bg-brand-rose transition-colors mt-8 disabled:opacity-50">
+            {loading ? 'Confirming...' : 'Confirm Booking'}
           </button>
         </form>
       </motion.div>
