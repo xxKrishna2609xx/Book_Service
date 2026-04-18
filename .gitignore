@@ -24,8 +24,21 @@ server/firebase-debug.*.log
 .env.development.local
 .env.test.local
 .env.production.local
+
+# Frontend (Vite) environment files
+client/.env
+client/.env.*
+
+# Backend (Firebase Functions) environment files
+server/.env
+server/.env.*
 server/functions/.env
+server/functions/.env.*
 
 # OS metadata
 .DS_Store
 Thumbs.db
+
+# Agent skills
+.agents/
+skills-lock.json
