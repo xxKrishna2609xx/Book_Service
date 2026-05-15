@@ -44,6 +44,9 @@ export default function Booking() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  const today = new Date();
+  const minDate = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+
   return (
     <div className="max-w-4xl mx-auto px-4 py-16">
       <div className="text-center mb-12">
@@ -87,7 +90,7 @@ export default function Booking() {
 
             <div className="space-y-2">
               <label className="text-sm font-medium text-gray-300 ml-1">Preferred Date</label>
-              <input required type="date" name="date" value={formData.date} onChange={handleChange} className="glass-input w-full [&::-webkit-calendar-picker-indicator]:filter [&::-webkit-calendar-picker-indicator]:invert" />
+              <input required type="date" name="date" min={minDate} value={formData.date} onChange={handleChange} className="glass-input w-full [&::-webkit-calendar-picker-indicator]:filter [&::-webkit-calendar-picker-indicator]:invert" />
             </div>
 
             <div className="space-y-2">
