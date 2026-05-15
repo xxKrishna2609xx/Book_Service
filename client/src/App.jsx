@@ -4,6 +4,7 @@ import Home from './pages/Home';
 import Login from './pages/Login';
 import Booking from './pages/Booking';
 import Success from './pages/Success';
+import MyBookings from './pages/MyBookings';
 import AdminDashboard from './pages/admin/AdminDashboard';
 import { useState, useEffect } from 'react';
 import { auth } from './services/firebase';
@@ -54,6 +55,11 @@ function AppLayout() {
           <Route path="/booking" element={
             <ProtectedRoute>
               <Booking />
+            </ProtectedRoute>
+          } />
+          <Route path="/my-bookings" element={
+            <ProtectedRoute>
+              <MyBookings />
             </ProtectedRoute>
           } />
           <Route path="/success" element={<Success />} />

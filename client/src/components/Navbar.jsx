@@ -23,14 +23,17 @@ export default function Navbar() {
         <Link to="/" className={`text-sm tracking-widest hover:text-brand-rose transition-colors ${location.pathname === '/' ? 'text-brand-pink' : 'text-gray-400'}`}>HOME</Link>
         <Link to="/booking" className={`text-sm tracking-widest hover:text-brand-rose transition-colors ${location.pathname === '/booking' ? 'text-brand-pink' : 'text-gray-400'}`}>BOOKING</Link>
         {user ? (
-          <div className="flex items-center gap-4">
-            <div className="w-8 h-8 rounded-full bg-brand-pink/20 border border-brand-pink flex items-center justify-center overflow-hidden">
-              {user.photoURL ? <img src={user.photoURL} alt="User" /> : <User className="w-4 h-4 text-brand-pink" />}
+          <>
+            <Link to="/my-bookings" className={`text-sm tracking-widest hover:text-brand-rose transition-colors ${location.pathname === '/my-bookings' ? 'text-brand-pink' : 'text-gray-400'}`}>MY BOOKINGS</Link>
+            <div className="flex items-center gap-4">
+              <div className="w-8 h-8 rounded-full bg-brand-pink/20 border border-brand-pink flex items-center justify-center overflow-hidden">
+                {user.photoURL ? <img src={user.photoURL} alt="User" /> : <User className="w-4 h-4 text-brand-pink" />}
+              </div>
+              <button onClick={logout} className="text-gray-400 hover:text-white transition-colors" title="Logout">
+                <LogOut className="w-5 h-5" />
+              </button>
             </div>
-            <button onClick={logout} className="text-gray-400 hover:text-white transition-colors title='Logout'">
-              <LogOut className="w-5 h-5" />
-            </button>
-          </div>
+          </>
         ) : (
           <Link to="/login" className="px-6 py-2 rounded-full border border-brand-pink/50 text-brand-pink hover:bg-brand-pink hover:text-brand-charcoal-dark transition-all duration-300 tracking-wider text-sm">
             SIGN IN

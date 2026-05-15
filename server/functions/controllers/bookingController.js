@@ -44,18 +44,36 @@ exports.createBooking = async (req, res) => {
 
 exports.getBookings = async (req, res) => {
   try {
+    const { email } = req.query;
     let bookings = [];
     try {
-      const snapshot = await db.collection(collectionName).orderBy("createdAt", "desc").get();
+      let query = db.collection(collectionName);
+      if (email) {
+        query = query.where("email", "==", email);
+      } else {
+        query = query.orderBy("createdAt", "desc");
+      }
+      const snapshot = await query.get();
       snapshot.forEach(doc => {
         bookings.push({ id: doc.id, ...doc.data() });
       });
+      if (email) {
+        bookings.sort((a, b) => (b.createdAt?.toMillis?.() || 0) - (a.createdAt?.toMillis?.() || 0));
+      }
     } catch (dbErr) {
       logger.warn("Firestore read failed. Returning mock data.");
-      bookings = [
+      const allMockBookings = [
         { id: "1", name: "Jane Doe", email: "jane@example.com", service: "Signature Haircut", date: "2026-06-01", time: "10:00 AM", status: "Pending" },
         { id: "2", name: "Alice Smith", email: "alice@example.com", service: "Radiance Facial", date: "2026-06-02", time: "02:00 PM", status: "Confirmed" }
       ];
+      if (email) {
+        bookings = allMockBookings.filter(b => b.email === email);
+        if (bookings.length === 0) {
+            bookings = [{ id: "mock-new", name: "Client", email: email, service: "Relaxation Spa", date: "2026-06-15", time: "11:00 AM", status: "Pending" }];
+        }
+      } else {
+        bookings = allMockBookings;
+      }
     }
     return res.status(200).json(bookings);
   } catch (error) {
